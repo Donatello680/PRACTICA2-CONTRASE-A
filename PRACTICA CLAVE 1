@@ -1,0 +1,83 @@
+//Construya una clase Usuario que cuente al menos con 3 atributos, uno de ellos debe ser la
+//contraseña, este atributo debe ser privado y contar con los encapsuladores correspondientes.
+//El encapsulador get devolverá solamente asteriscos, tantos como caracteres tenga la contraseña.
+//El encapsulador set validará:
+//1. Quela contraseña cuente al menos con 8 caracteres.
+//2. Que no existan dos caracteres iguales consecutivos.
+
+
+public class Usuario {
+    private String nombre;
+    private String email;
+    private String contraseña;
+
+    // Constructor
+    public Usuario(String nombre, String email, String contraseña) {
+        this.nombre = nombre;
+        this.email = email;
+        if (validarContraseña(contraseña)) {
+            this.contraseña = contraseña;
+        } else {
+            this.contraseña = ""; // Se deja vacía si no cumple requisitos
+        }
+    }
+
+    // Getter para nombre
+    public String getNombre() {
+        return nombre;
+    }
+
+    // Setter para nombre
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    // Getter para email
+    public String getEmail() {
+        return email;
+    }
+
+    // Setter para email
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    // Getter para contraseña (devolverá asteriscos sin usar StringBuilder)
+    public String getContraseña() {
+        String oculto = "";
+        for (int i = 0; i < contraseña.length(); i++) {
+            oculto += "*";
+        }
+        return oculto;
+    }
+
+    // Setter para contraseña con validaciones sin usar charAt
+    public void setContraseña(String contraseña) {
+        if (validarContraseña(contraseña)) {
+            this.contraseña = contraseña;
+        }
+    }
+
+    // Método para validar la contraseña usando compareTo en lugar de split
+    private boolean validarContraseña(String contraseña) {
+        if (contraseña.length() < 8) {
+            return false; // Debe tener al menos 8 caracteres
+        }
+        for (int i = 0; i < contraseña.length() - 1; i++) {
+            if (contraseña.substring(i, i + 1).compareTo(contraseña.substring(i + 1, i + 2)) == 0) {
+                return false; // No debe tener caracteres consecutivos repetidos
+            }
+        }
+        return true;
+    }
+}
+
+// Clase Main para probar la clase Usuario
+public class Main {
+    public static void main(String[] args) {
+        Usuario usuario = new Usuario("Juan Pérez", "juan@example.com", "Seguro123");
+        System.out.println("Nombre: " + usuario.getNombre());
+        System.out.println("Email: " + usuario.getEmail());
+        System.out.println("Contraseña: " + usuario.getContraseña());
+    }
+}
