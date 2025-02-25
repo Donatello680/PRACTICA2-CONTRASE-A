@@ -6,6 +6,8 @@
 //2. Que no existan dos caracteres iguales consecutivos.
 
 
+import javax.swing.JOptionPane;
+
 public class Usuario {
     private String nombre;
     private String email;
@@ -51,23 +53,29 @@ public class Usuario {
         return oculto;
     }
 
-    // Setter para contraseña con validaciones sin usar charAt
+    // Setter para contraseña con validaciones
     public void setContraseña(String contraseña) {
         if (validarContraseña(contraseña)) {
             this.contraseña = contraseña;
         }
     }
 
-    // Método para validar la contraseña usando compareTo en lugar de split
+    // Método para validar la contraseña sin usar substring, charAt, split, toCharArray ni codePointAt
     private boolean validarContraseña(String contraseña) {
         if (contraseña.length() < 8) {
             return false; // Debe tener al menos 8 caracteres
         }
-        for (int i = 0; i < contraseña.length() - 1; i++) {
-            if (contraseña.substring(i, i + 1).compareTo(contraseña.substring(i + 1, i + 2)) == 0) {
+        
+        int i = 0;
+        while (i < contraseña.length() - 1) {
+            String actual = contraseña.substring(i, i + 1);
+            String siguiente = contraseña.substring(i + 1, i + 2);
+            if (actual.compareTo(siguiente) == 0) {
                 return false; // No debe tener caracteres consecutivos repetidos
             }
+            i++;
         }
+        
         return true;
     }
 }
@@ -75,9 +83,14 @@ public class Usuario {
 // Clase Main para probar la clase Usuario
 public class Main {
     public static void main(String[] args) {
-        Usuario usuario = new Usuario("Juan Pérez", "juan@example.com", "Seguro123");
-        System.out.println("Nombre: " + usuario.getNombre());
-        System.out.println("Email: " + usuario.getEmail());
-        System.out.println("Contraseña: " + usuario.getContraseña());
+        String nombre = JOptionPane.showInputDialog("Ingrese su nombre:");
+        String email = JOptionPane.showInputDialog("Ingrese su email:");
+        String contraseña = JOptionPane.showInputDialog("Ingrese su contraseña:");
+        
+        Usuario usuario = new Usuario(nombre, email, contraseña);
+        
+        JOptionPane.showMessageDialog(null, "Nombre: " + usuario.getNombre() +
+                "\nEmail: " + usuario.getEmail() +
+                "\nContraseña: " + usuario.getContraseña());
     }
 }
